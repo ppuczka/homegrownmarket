@@ -2,7 +2,7 @@ spring:
     datasource:
         platform: mysql
         testWhileIdle: true
-        url: jdbc:mysql://localhost:3306/proba?useSSL=false&useTimezone=true&serverTimezone=UTC
+        url: jdbc:mysql://localhost:3306/homegrown_market?useSSL=false&useTimezone=true&serverTimezone=UTC
         username: vampirec
         password: password
 #        validationQuery: SELECT 1
@@ -12,3 +12,10 @@ spring:
         hibernate:
             ddl-auto: update
         show-sql: true
+    security:
+        user:
+            name: vampirec
+            password: admin
+server:
+    app:
+        name: homegrownMarket
