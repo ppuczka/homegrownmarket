@@ -12,10 +12,10 @@ spring:
         hibernate:
             ddl-auto: update
         show-sql: true
-    security:
-        user:
-            name: vampirec
-            password: admin
+#    security:
+#        user:
+#            name: vampirec
+#            password: admin
 server:
     app:
         name: homegrownMarket
