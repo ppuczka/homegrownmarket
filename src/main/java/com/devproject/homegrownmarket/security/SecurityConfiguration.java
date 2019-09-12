@@ -1,16 +1,26 @@
 package com.devproject.homegrownmarket.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    @Autowired
+    AppAuthenticationSuccessHandler appSuccessHandler;
+
+    SimpleUrlAuthenticationFailureHandler appFailureHandler = new SimpleUrlAuthenticationFailureHandler();
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -29,12 +39,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
                 .authorizeRequests()
-                .antMatchers("app/").authenticated()
+                .antMatchers("/app/**").authenticated()
                 .antMatchers("/app/admin/**").hasRole("ADMIN")
-                .antMatchers("/").access()
                 .and()
                 .formLogin()
-                .successHandler(appSucessHandler)
+                .successHandler(appSuccessHandler)
                 .failureHandler(appFailureHandler)
                 .and()
                 .logout();
