@@ -23,6 +23,7 @@ public class HomegrownmarketApplicationTests {
     private RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
     private HttpHeaders headers = new HttpHeaders();
+    private String cookie = "";
 
     @Test
     public void should_receive_200OK_when_POST_to_endpoint() {
@@ -31,12 +32,11 @@ public class HomegrownmarketApplicationTests {
         bodyMap.add("password", "userPass");
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(bodyMap, headers);
-        ResponseEntity<HttpResponse> response = restTemplate.postForEntity("http://localhost:8080/login", requestEntity, HttpResponse.class);
+        ResponseEntity<HttpResponse> response = restTemplate.postForEntity("http://localhost:8081/login", requestEntity, HttpResponse.class);
+        HttpHeaders responseHeaders = response.getHeaders();
+        cookie = responseHeaders.getFirst(HttpHeaders.SET_COOKIE);
+        System.out.println("---------------Cookie received = " + cookie + "---------------");
         assertEquals(200, response.getStatusCodeValue());
 
     }
-
-
-
-
 }

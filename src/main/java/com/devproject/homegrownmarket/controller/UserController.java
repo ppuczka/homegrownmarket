@@ -5,10 +5,12 @@ import com.devproject.homegrownmarket.exceptions.UserNotFoundException;
 import com.devproject.homegrownmarket.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.core.DummyInvocationUtils.methodOn;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -21,8 +23,15 @@ public class UserController {
     private final UserRepository repository;
 
     @GetMapping("/users")
-    public List<User> allUsers() {
-        return repository.findAll();
+    public Resources<Resource<User>> allUsers() {
+        List<Resource<User>> users = repository.findAll().stream()
+                .map(user -> new Resource<>(user,
+                        linkTo(methodOn(UserController.class).selectUser(user.getUserId())).withSelfRel(),
+                        linkTo(methodOn(UserController.class).allUsers()).withRel("employees")))
+                .collect(Collectors.toList());
+
+        return new Resources<>(users,
+                linkTo(methodOn(UserController.class).allUsers()).withSelfRel());
     }
 
     @PostMapping("/users")
@@ -48,13 +57,14 @@ public class UserController {
             user.setPassword(Optional.ofNullable(newUser.getPassword()).orElse(user.getPassword()));
             return repository.save(user);
         })
-                .orElseGet(() -> {newUser.setUserId(id);
+                .orElseGet(() -> {
+                    newUser.setUserId(id);
                     return repository.save(newUser);
                 });
     }
 
     @DeleteMapping("/users/{id}")
-    public String deleteUser(@PathVariable Long id)  {
+    public String deleteUser(@PathVariable Long id) {
         repository.deleteById(id);
         return "User " + id + "removed";
     };
