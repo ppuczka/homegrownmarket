@@ -19,3 +19,4 @@ spring:
 server:
     app:
         name: homegrownMarket
+    port: 8081

@@ -4,10 +4,14 @@ import com.devproject.homegrownmarket.entity.User;
 import com.devproject.homegrownmarket.exceptions.UserNotFoundException;
 import com.devproject.homegrownmarket.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.hateoas.core.DummyInvocationUtils.methodOn;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +19,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserRepository repository;
-
 
     @GetMapping("/users")
     public List<User> allUsers() {
@@ -28,8 +31,12 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User selectUser(@PathVariable Long id) {
-        return repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    public Resource<User> selectUser(@PathVariable Long id) {
+
+        User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return new Resource<>(user,
+                linkTo(methodOn(UserController.class).selectUser(id)).withSelfRel(),
+                linkTo(methodOn(UserController.class).allUsers()).withRel("users"));
     }
 
     @PutMapping("/users/{id}")
