@@ -1,7 +1,6 @@
 package com.devproject.homegrownmarket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.http.HttpEntity;
@@ -12,7 +11,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.net.http.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

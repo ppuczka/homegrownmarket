@@ -3,6 +3,7 @@ package com.devproject.homegrownmarket.controller;
 import com.devproject.homegrownmarket.entity.User;
 import com.devproject.homegrownmarket.exceptions.UserNotFoundException;
 import com.devproject.homegrownmarket.repository.UserRepository;
+import com.devproject.homegrownmarket.utils.UserResourceAssembler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -21,17 +22,16 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class UserController {
 
     private final UserRepository repository;
+    private final UserResourceAssembler assembler;
 
     @GetMapping("/users")
     public Resources<Resource<User>> allUsers() {
         List<Resource<User>> users = repository.findAll().stream()
-                .map(user -> new Resource<>(user,
-                        linkTo(methodOn(UserController.class).selectUser(user.getUserId())).withSelfRel(),
-                        linkTo(methodOn(UserController.class).allUsers()).withRel("employees")))
+                .map(assembler::toResource)
                 .collect(Collectors.toList());
 
         return new Resources<>(users,
-                linkTo(methodOn(UserController.class).allUsers()).withSelfRel());
+                linkTo(methodOn(UserController.class).all()).withSelfRel());
     }
 
     @PostMapping("/users")
