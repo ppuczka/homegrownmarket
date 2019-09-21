@@ -1,22 +1,26 @@
-spring:
-    datasource:
-        platform: mysql
-        testWhileIdle: true
-        url: jdbc:mysql://localhost:3306/homegrown_market?useSSL=false&useTimezone=true&serverTimezone=UTC
-        username: vampirec
-        password: password
-#        validationQuery: SELECT 1
-    jpa:
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-        generate-ddl: true
-        hibernate:
-            ddl-auto: update
-        show-sql: true
-#    security:
-#        user:
-#            name: vampirec
-#            password: admin
-server:
-    app:
-        name: homegrownMarket
-    port: 8081
+homeGrownMarket:
+    spring:
+        datasource:
+            platform: mysql
+            testWhileIdle: true
+            url: jdbc:mysql://localhost:3306/homegrown_market?useSSL=false&useTimezone=true&serverTimezone=UTC
+            username: vampirec
+            password: password
+    #        validationQuery: SELECT 1
+        jpa:
+            database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+            generate-ddl: true
+            hibernate:
+                ddl-auto: update
+            show-sql: true
+    #    security:
+    #        user:
+    #            name: vampirec
+    #            password: admin
+    server:
+        app:
+            name: homegrownMarket
+        port: 8081
+    facebook:
+        id: 2525363604415742
+

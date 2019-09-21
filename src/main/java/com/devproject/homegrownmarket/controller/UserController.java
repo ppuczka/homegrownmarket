@@ -31,7 +31,7 @@ public class UserController {
                 .collect(Collectors.toList());
 
         return new Resources<>(users,
-                linkTo(methodOn(UserController.class).all()).withSelfRel());
+                linkTo(methodOn(UserController.class).allUsers()).withSelfRel());
     }
 
     @PostMapping("/users")
