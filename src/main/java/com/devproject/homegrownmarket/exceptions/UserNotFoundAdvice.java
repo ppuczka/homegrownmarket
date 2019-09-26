@@ -15,4 +15,5 @@ public class UserNotFoundAdvice {
     String userNotFoundHandler(UserNotFoundException ex) {
         return ex.getMessage();
     }
+
 }
